@@ -7,24 +7,27 @@ import com.example.cryptoapp.data.mapper.CoinMapper
 import com.example.cryptoapp.data.network.ApiFactory
 import com.example.cryptoapp.data.workers.RefreshDataWorkerFactory
 import com.example.cryptoapp.di.DaggerApplicationComponent
+import javax.inject.Inject
 
 // Configuration from - import androidx.work.Configuration
 class CoinApp : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: RefreshDataWorkerFactory
+
 
     val component by lazy {
         DaggerApplicationComponent.factory().create(this)
     }
 
-    override fun getWorkManagerConfiguration(): Configuration {
-        return Configuration.Builder()
-            .setWorkerFactory(
-                RefreshDataWorkerFactory(
-                    AppDatabase.getInstance(this).coinPriceInfoDao(),
-                    ApiFactory.apiService,
-                    CoinMapper()
-                )
-            )
-            .build()
+    override fun onCreate() {
+        component.inject(this)
+        super.onCreate()
     }
 
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+    }
 }
