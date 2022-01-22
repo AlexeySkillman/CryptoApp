@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import com.example.cryptoapp.domain.GetCoinInfoListUseCase
 import com.example.cryptoapp.domain.GetCoinInfoUseCase
 import com.example.cryptoapp.domain.LoadDataUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class CoinViewModel @Inject constructor(
     private val getCoinInfoListUseCase: GetCoinInfoListUseCase,
     private val getCoinInfoUseCase: GetCoinInfoUseCase,

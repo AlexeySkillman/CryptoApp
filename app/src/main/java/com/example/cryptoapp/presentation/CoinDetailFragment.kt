@@ -1,40 +1,35 @@
 package com.example.cryptoapp.presentation
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.cryptoapp.databinding.ActivityCoinDetailBinding
 import com.example.cryptoapp.databinding.FragmentCoinDetailBinding
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
 import java.lang.RuntimeException
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CoinDetailFragment : Fragment() {
 
     private lateinit var viewModel: CoinViewModel
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
 
     private var _binding: FragmentCoinDetailBinding? = null
     private val binding: FragmentCoinDetailBinding
         get() = _binding ?: throw RuntimeException("FragmentCoinDetailBinding is null")
 
-    private val component by lazy {
-        (requireActivity().application as CoinApp).component
-    }
+//    private val component by lazy {
+//        (requireActivity().application as CoinApp).component
+//    }
 
-    override fun onAttach(context: Context) {
-        component.inject(this)
-        super.onAttach(context)
-    }
+//    override fun onAttach(context: Context) {
+//        component.inject(this)
+//        super.onAttach(context)
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +43,7 @@ class CoinDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val fromSymbol = getSymbol()
-        viewModel = ViewModelProvider(this, viewModelFactory)[CoinViewModel::class.java]
+        viewModel = ViewModelProvider(this)[CoinViewModel::class.java]
         viewModel.getDetailInfo(fromSymbol).observe(viewLifecycleOwner) {
             with(binding){
                 tvPrice.text = it.price

@@ -10,28 +10,40 @@ import com.example.cryptoapp.domain.CoinRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+
+// The Hilt module AnalyticsModule is annotated with @InstallIn(ActivityComponent::class)
+// because you want Hilt to inject that dependency into ExampleActivity.
+// This annotation means that all of the dependencies in AnalyticsModule are available
+// in all of the app's activities.
 
 @Module
+@InstallIn(SingletonComponent::class) // ActivityComponent для Активити
 interface DataModule {
 
-    @Binds
-    @ApplicationScope
+    @Singleton
+    @Binds // or Provides
     fun bindCoinRepository(impl: CoinRepositoryImpl): CoinRepository
+
 
     companion object{
 
-        @Provides
-        @ApplicationScope
-        fun provideCoinInfoDao(
-            application: Application
-        ): CoinInfoDao {
+        // Наверно так
+        @Singleton
+        @Provides // or Provides
+        fun provideCoinInfoDao( application: Application): CoinInfoDao {
             return  AppDatabase.getInstance(application).coinPriceInfoDao()
         }
-
+        @Singleton
         @Provides
-        @ApplicationScope
-        fun provideApiService(): ApiService{
+        fun provideApiService(): ApiService {
             return ApiFactory.apiService
         }
+
     }
 }
